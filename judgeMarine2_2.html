@@ -1,0 +1,366 @@
+<!-- 
+DESCRIPTION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>exp</title>
+  <script src="jspsych-6.0.3/jspsych.js"></script>
+  <script src="jspsych-6.0.3/plugins/jspsych-fullscreen.js"></script>
+  <script src="jspsych-6.0.3/plugins/jspsych-html-keyboard-response.js"></script>
+  <script src="jspsych-6.0.3/plugins/jspsych-html-slider-response.js"></script>
+  <script src="jspsych-6.0.3/plugins/jspsych-html-button-response.js"></script>
+  <script src="jspsych-6.0.3/plugins/jspsych-survey-text.js"></script>
+  <script src="jspsych-6.0.3/plugins/jspsych-survey-multi-choice.js"></script>
+  <script src="js/jspsych-html-slider-response_required.js"></script>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/lodash.min.js"></script>
+  <script src="js/firebase.js"></script>
+  <link href="jspsych-6.0.3/css/jspsych.css" rel="stylesheet" type="text/css">
+  <style>
+  body {
+    cursor: default;
+  }
+  #jspsych-html-slider-response-next {
+    margin: 0px;
+  }
+  .imgJudge {
+    width: 300px;
+    margin: 0px;
+    padding: 0px;
+  }
+  .jspsych-content-wrapper {
+    width: 700px;
+    height: 550px;
+  }
+</style>
+</head>
+<body></body>
+<script>
+  /* Parameters */
+  var n = 20; // number of CIs randomly sample for each cell
+  var preview_time = 800;
+  //var githubCIs = 'https://raw.githubusercontent.com/marinerougier/eval_AppAggPeace_cis/master/cis/'; // github CIs path for aggressive vs. peaceful approach (Exp. 2)
+  var githubCIs = 'https://raw.githubusercontent.com/marinerougier/eval_AppEvit_cis/master/cis/'; // github CIs path for Exp. 1
+
+  /* Initial variables */
+  var timeline = [];
+  var preloadimages = [];
+  var prolificID = jsPsych.data.getURLVariable("prolificID"); // Need to add ?prolificID={{%PROLIFIC_PID%}} at the end of the prolific survey link!
+
+  /* Functions */
+  function flatten(arr) {
+    return arr.reduce(function (flat, toFlatten) {
+      return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
+    }, []);
+  };
+
+  // CIs
+  var imgLink = ["all_ci_avg_gp1_App.jpeg",
+                 "all_ci_avg_gp1_Av.jpeg",
+                 "all_ci_avg_gp2_App.jpeg",
+                 "all_ci_avg_gp2_Av.jpeg",
+                 "Blue_ci_avg_gp1_App.jpeg",
+                 "Blue_ci_avg_gp1_Av.jpeg",
+                 "Blue_ci_avg_gp2_App.jpeg",
+                 "Blue_ci_avg_gp2_Av.jpeg",
+                 "frst_ci_avg_gp1_App.jpeg",
+                 "frst_ci_avg_gp1_Av.jpeg",
+                 "frst_ci_avg_gp2_App.jpeg",
+                 "frst_ci_avg_gp2_Av.jpeg",
+                 "scnd_ci_avg_gp1_App.jpeg",
+                 "scnd_ci_avg_gp1_Av.jpeg",
+                 "scnd_ci_avg_gp2_App.jpeg",
+                 "scnd_ci_avg_gp2_Av.jpeg",
+                 "Yellow_ci_avg_gp1_App.jpeg",
+                 "Yellow_ci_avg_gp1_Av.jpeg",
+                 "Yellow_ci_avg_gp2_App.jpeg",
+                 "Yellow_ci_avg_gp2_Av.jpeg"
+                 ];
+
+  // Add relative path to CIs
+  imgLink = imgLink.map(function(e) {return githubCIs + e});
+
+  // CIs stims
+  CIsStims = imgLink.map(function(e) {return {imgHtml: "<img class='imgJudge' src='" + e + "'>"}});
+
+  // Randomly sample n CIs
+  var sampledCIsStims = _.sampleSize(CIsStims, n);
+
+  // Preload images
+  preloadimages.push(imgLink);
+  preloadimages = flatten(preloadimages);
+
+
+  // EXPERIMENT --------------------------------------------------------------------------------------------------------
+
+  /* FULL SCREEN MODE */
+  var activeFullscreen = {
+    message: "",
+    button_label: "Click here to switch to fullscreen mode",
+    type: 'fullscreen',
+    fullscreen_mode: true,
+    delay_after: 200,
+  };
+
+  /* CONSENT */
+  var consent = {
+    type: 'html-button-response',
+    stimulus: function() {
+        html = "";
+        html += "<h1>Informed Consent</h1>";
+        html += "<p class='justify'>First, thank you for participating in this study! ";
+        html += "In this study, your task is to rate faces on several dimensions. ";
+        html += "This should take you approximately <strong>10 minutes</strong>. During this period, ";
+        html += "it is important that you remain fully <strong>concentrated</strong>.</p>";
+        html += "<p class='justify'>Your participation is voluntary, does not imply any risks, your answers will be ";
+        html += "anonymous, and you are free to withdraw from the study at any moment. After full completion, ";
+        html += "you will receive a <strong>monetary compensation</strong> as stated in the Prolific ";
+        html += "description of this experiment.</p>";
+        html += "<p class='justify'>This study is administrated by Marine Rougier, reasearcher at the UCLouvain (Belgium). ";
+        html += "If you have any question or comment please contact me at <strong>marine.rougier@uclouvain.be</strong></p>";
+        return html;
+    },
+    choices: ["I agree to take part in this study"],
+  };
+
+  /* PREVIEW CIS INSTRUCTIONS */
+  var previewCIinst = {
+    type: "html-keyboard-response",
+    post_trial_gap: 300,
+    choices: [32],
+    stimulus: function() {
+      var html = "";
+      html += "<h1>Faces rating</h1>";
+      html += "<p class='justify'>Your task will be to rate faces on 6 dimensions (each dimension taken separately). "
+      html += "Specifically, you will have to indicate to what extent each face seems ";
+      html += "<b>Intelligent, Warm, Able, Sociable, Competent and Sympathetic.</b> </br>";
+      html += "As you will see, these faces have been <b>blurred</b> to make the task less easy. </br></br>";
+      html += "Before the evaluation task, <b>we will present you a sample of faces</b> ";
+      html += "during less than 1 second each. This will allow you to take into account ";
+      html += "similarities/differences between the faces before you rate them.</br></br>";
+      html += "Faces will be automatically displayed, please pay attention.</br></br>";
+      html += "<p></br>Press <span class='light-keys'><kbd>space</kbd></span> to begin</p>";
+      return html;
+    },
+  };
+
+  /* PREVIEW CIS */
+  var previewCI = {
+    timeline_variables: CIsStims,
+    choices: jsPsych.NO_KEYS,
+    trial_duration: preview_time,
+    post_trial_gap: 100,
+    timeline: [{
+      type: 'html-keyboard-response',
+      stimulus: function() {return jsPsych.timelineVariable('imgHtml', true)},
+    }]
+  };
+
+  /* JUDGMENTS INSTRUCTIONS */
+  var genJudgmentInst = function(trait) {
+    var jugmentInst = {
+      type: "html-keyboard-response",
+      post_trial_gap: 300,
+      choices: [32],
+      stimulus: function() {
+        var html = "";
+        html += "<h1>Faces rating</h1>";
+        html += "<p class='justify'>In this part of the study, your task is to indicate, "
+        html += "for each face (20 faces in total), to what extent this face seems <b>" + trait + "</b> ";
+        html += "from 0 (not " + trait + " at all) to 100 (totally " + trait + ").</br></br>";
+        html += "Note that it is extremely important for you to <b>answer as honestly and as spontaneously as possible.</b> "
+        html += "The first answer that comes to mind is usually the best answer.</br></br>";
+        html += "<p></br>Press <span class='light-keys'><kbd>space</kbd></span> to begin</p>";
+        return html;
+      },
+    };
+    return jugmentInst;
+  };
+
+  var idIntelligentInst     = genJudgmentInst("intelligent");
+  var idWarmInst            = genJudgmentInst("warm");
+  var idAbleInst            = genJudgmentInst("able");
+  var idSociableInst        = genJudgmentInst("sociable");
+  var idCompetentInst       = genJudgmentInst("competent");
+  var idSympatheticInst     = genJudgmentInst("sympathetic");
+
+  /* JUDGMENTS */
+  var genJudgmentTask = function(trait, sliderLables) {
+    // trait: string to be used as a variable in the data
+    // sliderLabels: array of strings to be used as labels
+    var jugmentInst = {
+      type: "html-keyboard-response",
+      post_trial_gap: 300,
+      choices: [32],
+      stimulus: function() {
+        var html = "";
+        html += "<h1>Faces rating</h1>";
+        html += "<p class='justify'>In this part of the study, your task is to indicate "
+        html += "for each face (20 faces in total), to what extent this face seems <b>" + trait + "</b> ";
+        html += "from 0 (not " + trait + " at all) to 100 (totally " + trait + ").</br></br>";
+        html += "Note that it is extremely important for you to <b>answer as honestly and as spontaneously as possible.</b> "
+        html += "The first answer that comes to mind is usually the best answer.</br></br>";
+        html += "<p></br>Press <span class='light-keys'><kbd>space</kbd></span> to begin</p>";
+        return html;
+      },
+    };
+
+    var judgments = [];
+    sampledCIsStims = _.shuffle(sampledCIsStims); // randomize trial order
+    sampledCIsStims.map(function(stims){ // use map instead of timeline_variable to be able to use loop_function on each trial
+      var judgmentTrial = {
+        timeline: [{
+          type: 'html-slider-response',
+          stimulus: stims.imgHtml,
+          labels: sliderLables,//['0</br>Pas du tout criminel', '100</br>Très criminel'],
+          start: 50,
+          button_label: 'Continue'
+        }],
+        data: {trait: trait},
+        on_load: function() {
+          $("#jspsych-html-slider-response-wrapper").css("margin", "50px"); // avoids pushing continue button too far down
+          $("#jspsych-html-slider-response-wrapper").css("line-height", 1); // slider labels
+        },
+        on_finish: function(data) {
+          console.log(data.stimulus);
+          console.log(data.response);
+          console.log(data.answered);
+        },
+        loop_function: function(data){ 
+          var answered = data.values()[0].answered;
+          console.log(answered);
+          if(!answered){
+            alert("Please answer the question"); 
+            return true; 
+          } 
+        }
+      };
+      judgments.push(judgmentTrial);
+    });
+    return [jugmentInst, judgments];
+  };
+
+  var labelsIntelligent    = ['0</br>Not intelligent at all', '100</br>Totally intelligent'];
+  var labelsWarm           = ['0</br>Not warm at all', '100</br>Totally warm'];
+  var labelsAble           = ['0</br>Not able at all', '100</br>Totally able'];
+  var labelsSociable       = ['0</br>Not sociable at all', '100</br>Totally sociable'];
+  var labelsCompetent      = ['0</br>Not competent at all', '100</br>Totally competent'];
+  var labelsSympathetic      = ['0</br>Not sympathetic at all', '100</br>Totally sympathetic'];
+
+  var idIntelligent     = genJudgmentTask('intelligent',       labelsIntelligent);
+  var idWarm            = genJudgmentTask('warm',              labelsWarm);
+  var idAble            = genJudgmentTask('able',              labelsAble);
+  var idSociable        = genJudgmentTask('sociable',          labelsSociable);
+  var idCompetent       = genJudgmentTask('competent',         labelsCompetent);
+  var idSympathetic     = genJudgmentTask('sympathetic',       labelsSympathetic);
+
+  // Randomize judgments trait order
+  var traitsOrder = _.sampleSize(['idIntelligent', 'idWarm', 'idAble', 'idSociable', 'idCompetent', 'idSympathetic'], 6);
+  console.log(traitsOrder);
+
+  /* AGE */
+  var age = {
+      timeline: [{
+        type: 'survey-text',
+        questions: [{prompt: "How old are you?", rows: 1, columns: 10}],
+        button_label: "Continue",
+      }],
+      loop_function: function(data){ 
+        var age = data.values()[0].responses;
+        var age = JSON.parse(age).Q0; 
+        if(age == ""){
+          alert("Please indicate your age"); 
+          return true; 
+        }
+      },
+      on_finish: function(data) {
+          jsPsych.data.addProperties({
+              age: JSON.parse(data.responses)["Q0"],
+          });
+      },
+  };
+
+  var gender = {
+      type: 'survey-multi-choice',
+      questions: [{prompt: "Please indicate your gender:", options: ['Male', 'Female', 'Other'], required: true}],
+      button_label: "Continue",
+      on_finish: function(data) {
+          jsPsych.data.addProperties({
+              gender: JSON.parse(data.responses)["Q0"],
+          });
+      },
+  };
+
+  /* EXIT FULLSCREEN MODE */
+  var exitFullscreen = {
+    type: 'fullscreen',
+    fullscreen_mode: false
+  };
+
+  /* DEBRIEF */
+  var debrief = [];
+  debrief += "<h1>End of the experiment</h1>";
+  debrief += "<p class='justify'>Thank you for your participation!</br>";
+  debrief += "Please click on the following link to validate your participation:</p>";
+  debrief += "<a href='https://www.google.com/' target='_blank'>clik here</a>";
+
+  // TIMELINE ----------------------------------------------------------------------------------------------------------
+  timeline.push(activeFullscreen);
+  timeline.push(consent);
+  timeline.push(previewCIinst);
+  timeline.push(previewCI);
+  traitsOrder.map(function(e) {return timeline.push( eval(e) )} );
+  timeline.push(age);
+  timeline.push(gender);
+  timeline.push(exitFullscreen);
+  
+  timeline = flatten(timeline); // do not remove this!
+
+  // INITIALISE EXP ----------------------------------------------------------------------------------------------------
+  jsPsych.init({
+    timeline: timeline,
+    preload_images: preloadimages,
+    max_load_time: 500*1000,
+    exclusions: {
+      min_width: 700,
+      min_height: 550,
+    },
+    on_finish: function(data) { 
+      $("#jspsych-content").html("<img src='https://i.gifer.com/4V0b.gif'>");
+
+      /* Initialize Firebase */
+      var config = {
+        apiKey: "AIzaSyBwDr8n-RNCbBOk1lKIxw7AFgslXGcnQzM",
+        databaseURL: "https://marineexpe.firebaseio.com/"
+      };
+
+      firebase.initializeApp(config);
+      var database = firebase.database();
+      id = jsPsych.randomization.randomID(15); // short ID
+
+      /* jsPsych: add data to every trial */
+      jsPsych.data.addProperties({
+        prolificID: prolificID,
+        id: id,
+        traitsOrder: traitsOrder,
+        totalTime: jsPsych.totalTime()
+      });
+
+      var subdata = data.filter({trial_type: 'html-slider-response'}).csv();
+      //jsPsych.data.displayData();
+
+      /* Send data to Firebase and redirect to Qualtrics */
+      database.ref("judgeMarine2/" + id + "/").update({subdata}).then(function() { 
+        console.log("data sent!");
+        $("#jspsych-content").html(debrief);
+        //window.location = qlink; // redirect to qualtrics
+      });
+    }
+  });
+</script>
+
+</html>
