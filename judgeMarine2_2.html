@@ -59,27 +59,28 @@ DESCRIPTION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   };
 
   // CIs
-  var imgLink = ["all_ci_avg_gp1_App.jpeg",
-                 "all_ci_avg_gp1_Av.jpeg",
-                 "all_ci_avg_gp2_App.jpeg",
-                 "all_ci_avg_gp2_Av.jpeg",
-                 "Blue_ci_avg_gp1_App.jpeg",
-                 "Blue_ci_avg_gp1_Av.jpeg",
-                 "Blue_ci_avg_gp2_App.jpeg",
-                 "Blue_ci_avg_gp2_Av.jpeg",
-                 "frst_ci_avg_gp1_App.jpeg",
-                 "frst_ci_avg_gp1_Av.jpeg",
-                 "frst_ci_avg_gp2_App.jpeg",
-                 "frst_ci_avg_gp2_Av.jpeg",
-                 "scnd_ci_avg_gp1_App.jpeg",
-                 "scnd_ci_avg_gp1_Av.jpeg",
-                 "scnd_ci_avg_gp2_App.jpeg",
-                 "scnd_ci_avg_gp2_Av.jpeg",
-                 "Yellow_ci_avg_gp1_App.jpeg",
-                 "Yellow_ci_avg_gp1_Av.jpeg",
-                 "Yellow_ci_avg_gp2_App.jpeg",
-                 "Yellow_ci_avg_gp2_Av.jpeg"
-                 ];
+var imgLink = [
+  "Blue_ci_avg_gp2_App.jpeg", 
+  "frst_ci_avg_gp1_Av.jpeg", 
+  "scnd_ci_avg_gp1_Av.jpeg", 
+  "Blue_ci_avg_gp1_App.jpeg", 
+  "scnd_ci_avg_gp2_App.jpeg", 
+  "all_ci_avg_gp2_App.jpeg", 
+  "frst_ci_avg_gp1_App.jpeg", 
+  "Yellow_ci_avg_gp1_Av.jpeg", 
+  "Blue_ci_avg_gp2_Av.jpeg", 
+  "Yellow_ci_avg_gp2_App.jpeg", 
+  "frst_ci_avg_gp2_App.jpeg", 
+  "scnd_ci_avg_gp1_App.jpeg", 
+  "frst_ci_avg_gp2_Av.jpeg", 
+  "all_ci_avg_gp1_App.jpeg", 
+  "all_ci_avg_gp2_Av.jpeg", 
+  "scnd_ci_avg_gp2_Av.jpeg", 
+  "all_ci_avg_gp1_Av.jpeg", 
+  "Yellow_ci_avg_gp2_Av.jpeg", 
+  "Blue_ci_avg_gp1_Av.jpeg", 
+  "Yellow_ci_avg_gp1_App.jpeg"
+];
 
   // Add relative path to CIs
   imgLink = imgLink.map(function(e) {return githubCIs + e});
@@ -113,7 +114,7 @@ DESCRIPTION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         html = "";
         html += "<h1>Informed Consent</h1>";
         html += "<p class='justify'>First, thank you for participating in this study! ";
-        html += "In this study, your task is to rate faces on several dimensions. ";
+        html += "In this study, your task is to rate faces on several traits. ";
         html += "This should take you approximately <strong>10 minutes</strong>. During this period, ";
         html += "it is important that you remain fully <strong>concentrated</strong>.</p>";
         html += "<p class='justify'>Your participation is voluntary, does not imply any risks, your answers will be ";
@@ -135,14 +136,13 @@ DESCRIPTION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     stimulus: function() {
       var html = "";
       html += "<h1>Faces rating</h1>";
-      html += "<p class='justify'>Your task will be to rate faces on 6 dimensions (each dimension taken separately). "
+      html += "<p class='justify'>Your task will be to rate faces on 6 traits (each trait taken separately). "
       html += "Specifically, you will have to indicate to what extent each face seems ";
-      html += "<b>Intelligent, Warm, Able, Sociable, Competent and Sympathetic.</b> </br>";
-      html += "As you will see, these faces have been <b>blurred</b> to make the task less easy. </br></br>";
-      html += "Before the evaluation task, <b>we will present you the faces</b> ";
-      html += "during less than 1 second each. This will allow you to take into account ";
-      html += "similarities/differences between the faces before you rate them.</br></br>";
-      html += "Faces will be automatically displayed, please pay attention.</br></br>";
+      html += "<b>Intelligent, Warm, Able, Sociable, Competent</b> and <b>Sympathetic</b> </br>";
+      html += "As you will see, these faces have been <b>blurred</b> to make the task more challenging. </br></br>";
+      html += "Before the evaluation task, <b>we will first briefly present you the faces</b> ";
+      html += "for you to better gauge the similarities and differences between them. </br>";
+      html += "Faces will be automatically paced (less than 1 second per face). Pleace remain concentrated.</br></br>";
       html += "<p></br>Press <span class='light-keys'><kbd>space</kbd></span> to begin</p>";
       return html;
     },
@@ -169,8 +169,8 @@ DESCRIPTION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       stimulus: function() {
         var html = "";
         html += "<h1>Faces rating</h1>";
-        html += "<p class='justify'>In this part of the study, your task is to indicate, "
-        html += "for each face (20 faces in total), to what extent this face seems <b>" + trait + "</b> ";
+        html += "<p class='justify'>You will now be asked to indicate for each face (20 faces in total) "
+        html += "the extent to which the face seems <b> " + trait + "</b> ";
         html += "from 0 (not " + trait + " at all) to 100 (totally " + trait + ").</br></br>";
         html += "Note that it is extremely important for you to <b>answer as honestly and as spontaneously as possible.</b> "
         html += "The first answer that comes to mind is usually the best answer.</br></br>";
@@ -251,15 +251,15 @@ DESCRIPTION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   var labelsCompetent      = ['0</br>Not competent at all', '100</br>Totally competent'];
   var labelsSympathetic      = ['0</br>Not sympathetic at all', '100</br>Totally sympathetic'];
 
-  var idIntelligent     = genJudgmentTask('intelligent',       labelsIntelligent);
-  var idWarm            = genJudgmentTask('warm',              labelsWarm);
-  var idAble            = genJudgmentTask('able',              labelsAble);
-  var idSociable        = genJudgmentTask('sociable',          labelsSociable);
-  var idCompetent       = genJudgmentTask('competent',         labelsCompetent);
-  var idSympathetic     = genJudgmentTask('sympathetic',       labelsSympathetic);
+  var Intelligent     = genJudgmentTask('intelligent',       labelsIntelligent);
+  var Warm            = genJudgmentTask('warm',              labelsWarm);
+  var Able            = genJudgmentTask('able',              labelsAble);
+  var Sociable        = genJudgmentTask('sociable',          labelsSociable);
+  var Competent       = genJudgmentTask('competent',         labelsCompetent);
+  var Sympathetic     = genJudgmentTask('sympathetic',       labelsSympathetic);
 
   // Randomize judgments trait order
-  var traitsOrder = _.sampleSize(['idIntelligent', 'idWarm', 'idAble', 'idSociable', 'idCompetent', 'idSympathetic'], 6);
+  var traitsOrder = _.sampleSize(['Intelligent', 'Warm', 'Able', 'Sociable', 'Competent', 'Sympathetic'], 6);
   console.log(traitsOrder);
 
   /* AGE */
@@ -306,7 +306,7 @@ DESCRIPTION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   debrief += "<h1>End of the experiment</h1>";
   debrief += "<p class='justify'>Thank you for your participation!</br>";
   debrief += "Please click on the following link to validate your participation:</p>";
-  debrief += "<a href='https://www.google.com/' target='_blank'>clik here</a>";
+  debrief += "<a href='https://app.prolific.ac/submissions/complete?cc=UIOKLKDW' target='_blank'>clik here</a>";
 
   // TIMELINE ----------------------------------------------------------------------------------------------------------
   timeline.push(activeFullscreen);
