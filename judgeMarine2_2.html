@@ -41,7 +41,7 @@ DESCRIPTION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 <body></body>
 <script>
   /* Parameters */
-  var n = 20; // number of CIs randomly sample for each cell
+  var n = 2; // number of CIs randomly sample for each cell
   var preview_time = 800;
   //var githubCIs = 'https://raw.githubusercontent.com/marinerougier/eval_AppAggPeace_cis/master/cis/'; // github CIs path for aggressive vs. peaceful approach (Exp. 2)
   var githubCIs = 'https://raw.githubusercontent.com/marinerougier/eval_AppEvit_cis/master/cis/'; // github CIs path for Exp. 1
@@ -138,7 +138,7 @@ var imgLink = [
       html += "<h1>Faces rating</h1>";
       html += "<p class='justify'>Your task will be to rate faces on 6 traits (each trait taken separately). "
       html += "Specifically, you will have to indicate to what extent each face seems ";
-      html += "<b>Intelligent, Warm, Able, Sociable, Competent</b> and <b>Sympathetic</b> </br>";
+      html += "<b>Aggressive, Powerless, Friendly, Smart, Cruel</b> and <b>Bored</b> </br>";
       html += "As you will see, these faces have been <b>blurred</b> to make the task more challenging. </br></br>";
       html += "Before the evaluation task, <b>we will first briefly present you the faces</b> ";
       html += "for you to better gauge the similarities and differences between them. </br>";
@@ -181,12 +181,12 @@ var imgLink = [
     return jugmentInst;
   };
 
-  var idIntelligentInst     = genJudgmentInst("intelligent");
-  var idWarmInst            = genJudgmentInst("warm");
-  var idAbleInst            = genJudgmentInst("able");
-  var idSociableInst        = genJudgmentInst("sociable");
-  var idCompetentInst       = genJudgmentInst("competent");
-  var idSympatheticInst     = genJudgmentInst("sympathetic");
+  var idAggressiveInst     = genJudgmentInst("aggressive");
+  var idFriendlyInst       = genJudgmentInst("friendly");
+  var idCruelInst          = genJudgmentInst("cruel");
+  var idPowerlessInst      = genJudgmentInst("powerless");
+  var idSmartInst          = genJudgmentInst("smart");
+  var idBoredInst          = genJudgmentInst("bored");
 
   /* JUDGMENTS */
   var genJudgmentTask = function(trait, sliderLables) {
@@ -244,22 +244,22 @@ var imgLink = [
     return [jugmentInst, judgments];
   };
 
-  var labelsIntelligent    = ['0</br>Not intelligent at all', '100</br>Totally intelligent'];
-  var labelsWarm           = ['0</br>Not warm at all', '100</br>Totally warm'];
-  var labelsAble           = ['0</br>Not able at all', '100</br>Totally able'];
-  var labelsSociable       = ['0</br>Not sociable at all', '100</br>Totally sociable'];
-  var labelsCompetent      = ['0</br>Not competent at all', '100</br>Totally competent'];
-  var labelsSympathetic      = ['0</br>Not sympathetic at all', '100</br>Totally sympathetic'];
+  var labelsAggressive    = ['0</br>Not aggressive at all', '100</br>Totally aggressive'];
+  var labelsFriendly      = ['0</br>Not friendly at all', '100</br>Totally friendly'];
+  var labelsCruel         = ['0</br>Not cruel at all', '100</br>Totally cruel'];
+  var labelsPowerless     = ['0</br>Not powerless at all', '100</br>Totally powerless'];
+  var labelsSmart         = ['0</br>Not smart at all', '100</br>Totally smart'];
+  var labelsBored         = ['0</br>Not bored at all', '100</br>Totally bored'];
 
-  var Intelligent     = genJudgmentTask('intelligent',       labelsIntelligent);
-  var Warm            = genJudgmentTask('warm',              labelsWarm);
-  var Able            = genJudgmentTask('able',              labelsAble);
-  var Sociable        = genJudgmentTask('sociable',          labelsSociable);
-  var Competent       = genJudgmentTask('competent',         labelsCompetent);
-  var Sympathetic     = genJudgmentTask('sympathetic',       labelsSympathetic);
+  var Aggressive          = genJudgmentTask('aggressive',       labelsAggressive);
+  var Friendly            = genJudgmentTask('friendly',         labelsFriendly);
+  var Cruel               = genJudgmentTask('cruel',            labelsCruel);
+  var Powerless           = genJudgmentTask('powerless',        labelsPowerless);
+  var Smart               = genJudgmentTask('smart',            labelsSmart);
+  var Bored               = genJudgmentTask('bored',            labelsBored);
 
   // Randomize judgments trait order
-  var traitsOrder = _.sampleSize(['Intelligent', 'Warm', 'Able', 'Sociable', 'Competent', 'Sympathetic'], 6);
+  var traitsOrder = _.sampleSize(['Aggressive', 'Friendly', 'Cruel', 'Powerless', 'Smart', 'Bored'], 6);
   console.log(traitsOrder);
 
   /* AGE */
