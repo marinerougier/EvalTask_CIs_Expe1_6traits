@@ -41,8 +41,8 @@ DESCRIPTION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 <body></body>
 <script>
   /* Parameters */
-  var n = 2; // number of CIs randomly sample for each cell
-  var preview_time = 800;
+  var n = 4; // number of CIs randomly sample for each cell
+  var preview_time = 2000;
   //var githubCIs = 'https://raw.githubusercontent.com/marinerougier/eval_AppAggPeace_cis/master/cis/'; // github CIs path for aggressive vs. peaceful approach (Exp. 2)
   var githubCIs = 'https://raw.githubusercontent.com/marinerougier/eval_AppEvit_cis/master/cis/'; // github CIs path for Exp. 1
 
@@ -60,26 +60,10 @@ DESCRIPTION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   // CIs
 var imgLink = [
-  "Blue_ci_avg_gp2_App.jpeg", 
-  "frst_ci_avg_gp1_Av.jpeg", 
-  "scnd_ci_avg_gp1_Av.jpeg", 
-  "Blue_ci_avg_gp1_App.jpeg", 
-  "scnd_ci_avg_gp2_App.jpeg", 
   "all_ci_avg_gp2_App.jpeg", 
-  "frst_ci_avg_gp1_App.jpeg", 
-  "Yellow_ci_avg_gp1_Av.jpeg", 
-  "Blue_ci_avg_gp2_Av.jpeg", 
-  "Yellow_ci_avg_gp2_App.jpeg", 
-  "frst_ci_avg_gp2_App.jpeg", 
-  "scnd_ci_avg_gp1_App.jpeg", 
-  "frst_ci_avg_gp2_Av.jpeg", 
   "all_ci_avg_gp1_App.jpeg", 
   "all_ci_avg_gp2_Av.jpeg", 
-  "scnd_ci_avg_gp2_Av.jpeg", 
-  "all_ci_avg_gp1_Av.jpeg", 
-  "Yellow_ci_avg_gp2_Av.jpeg", 
-  "Blue_ci_avg_gp1_Av.jpeg", 
-  "Yellow_ci_avg_gp1_App.jpeg"
+  "all_ci_avg_gp1_Av.jpeg"
 ];
 
   // Add relative path to CIs
@@ -136,13 +120,14 @@ var imgLink = [
     stimulus: function() {
       var html = "";
       html += "<h1>Faces rating</h1>";
-      html += "<p class='justify'>Your task will be to rate faces on 6 traits (each trait taken separately). "
+      html += "<p class='justify'>Your task will be to rate 4 faces on 20 traits (each trait taken separately). ";
       html += "Specifically, you will have to indicate to what extent each face seems ";
-      html += "<b>Aggressive, Powerless, Friendly, Smart, Cruel</b> and <b>Bored</b> </br>";
+      html += "<b>Aggressive, Antisocial, Bored, Brutal, Clever, Cooperative, Cordial, Cowardly, Cruel, Friendly, ";
+      html += "Independent, Lonely, Persistent, Powerless, Skillful, Smart, Tolerant, Understanding, Vicious </b> and <b>Weak</b> </br>";
       html += "As you will see, these faces have been <b>blurred</b> to make the task more challenging. </br></br>";
       html += "Before the evaluation task, <b>we will first briefly present you the faces</b> ";
       html += "for you to better gauge the similarities and differences between them. </br>";
-      html += "Faces will be automatically paced (less than 1 second per face). Pleace remain concentrated.</br></br>";
+      html += "Faces will be automatically paced during 2 seconds each. Pleace remain concentrated.</br></br>";
       html += "<p></br>Press <span class='light-keys'><kbd>space</kbd></span> to begin</p>";
       return html;
     },
@@ -169,7 +154,7 @@ var imgLink = [
       stimulus: function() {
         var html = "";
         html += "<h1>Faces rating</h1>";
-        html += "<p class='justify'>You will now be asked to indicate for each face (20 faces in total) "
+        html += "<p class='justify'>You will now be asked to indicate for each face (4 faces in total) "
         html += "the extent to which the face seems <b> " + trait + "</b> ";
         html += "from 0 (not " + trait + " at all) to 100 (totally " + trait + ").</br></br>";
         html += "Note that it is extremely important for you to <b>answer as honestly and as spontaneously as possible.</b> "
@@ -182,11 +167,25 @@ var imgLink = [
   };
 
   var idAggressiveInst     = genJudgmentInst("aggressive");
-  var idFriendlyInst       = genJudgmentInst("friendly");
-  var idCruelInst          = genJudgmentInst("cruel");
-  var idPowerlessInst      = genJudgmentInst("powerless");
-  var idSmartInst          = genJudgmentInst("smart");
+  var idAntisocialInst     = genJudgmentInst("antisocial");
   var idBoredInst          = genJudgmentInst("bored");
+  var idBrutalInst         = genJudgmentInst("brutal");
+  var idCleverInst         = genJudgmentInst("clever");
+  var idCooperativeInst    = genJudgmentInst("cooperative");
+  var idCordialInst        = genJudgmentInst("cordial");
+  var idCowardlyInst       = genJudgmentInst("cowardly");
+  var idCruelInst          = genJudgmentInst("cruel");
+  var idFriendlyInst       = genJudgmentInst("friendly");
+  var idIndependentInst    = genJudgmentInst("independent");
+  var idLonelyInst         = genJudgmentInst("lonely");
+  var idPersistentInst     = genJudgmentInst("persistent");
+  var idPowerlessInst      = genJudgmentInst("powerless");
+  var idSkillfulInst       = genJudgmentInst("skillful");
+  var idSmartInst          = genJudgmentInst("smart");
+  var idTolerantInst       = genJudgmentInst("tolerant");
+  var idUnderstandingInst  = genJudgmentInst("understanding");
+  var idViciousInst        = genJudgmentInst("vicious");
+  var idWeakInst           = genJudgmentInst("weak");
 
   /* JUDGMENTS */
   var genJudgmentTask = function(trait, sliderLables) {
@@ -199,7 +198,7 @@ var imgLink = [
       stimulus: function() {
         var html = "";
         html += "<h1>Faces rating</h1>";
-        html += "<p class='justify'>You will now be asked to indicate for each face (20 faces in total) "
+        html += "<p class='justify'>You will now be asked to indicate for each face (4 faces in total) "
         html += "the extent to which the face seems <b> " + trait + "</b> ";
         html += "from 0 (not " + trait + " at all) to 100 (totally " + trait + ").</br></br>";
         html += "Note that it is extremely important for you to <b>answer as honestly and as spontaneously as possible.</b> "
@@ -244,22 +243,51 @@ var imgLink = [
     return [jugmentInst, judgments];
   };
 
-  var labelsAggressive    = ['0</br>Not aggressive at all', '100</br>Totally aggressive'];
-  var labelsFriendly      = ['0</br>Not friendly at all', '100</br>Totally friendly'];
-  var labelsCruel         = ['0</br>Not cruel at all', '100</br>Totally cruel'];
-  var labelsPowerless     = ['0</br>Not powerless at all', '100</br>Totally powerless'];
-  var labelsSmart         = ['0</br>Not smart at all', '100</br>Totally smart'];
-  var labelsBored         = ['0</br>Not bored at all', '100</br>Totally bored'];
+  var labelsAggressive     = ['0</br>Not aggressive at all', '100</br>Totally aggressive'];
+  var labelsAntisocial     = ['0</br>Not antisocial at all', '100</br>Totally antisocial'];
+  var labelsBored          = ['0</br>Not bored at all', '100</br>Totally bored'];
+  var labelsBrutal         = ['0</br>Not brutal at all', '100</br>Totally brutal'];
+  var labelsClever         = ['0</br>Not clever at all', '100</br>Totally clever'];
+  var labelsCooperative    = ['0</br>Not cooperative at all', '100</br>Totally cooperative'];
+  var labelsCordial        = ['0</br>Not cordial at all', '100</br>Totally cordial'];
+  var labelsCowardly       = ['0</br>Not cowardly at all', '100</br>Totally cowardly'];
+  var labelsCruel          = ['0</br>Not cruel at all', '100</br>Totally cruel'];
+  var labelsFriendly       = ['0</br>Not friendly at all', '100</br>Totally friendly'];
+  var labelsIndependent    = ['0</br>Not independent at all', '100</br>Totally independent'];
+  var labelsLonely         = ['0</br>Not lonely at all', '100</br>Totally lonely'];
+  var labelsPersistent     = ['0</br>Not persistent at all', '100</br>Totally persistent'];
+  var labelsPowerless      = ['0</br>Not powerless at all', '100</br>Totally powerless'];
+  var labelsSkillful       = ['0</br>Not skillful at all', '100</br>Totally skillful'];
+  var labelsSmart          = ['0</br>Not smart at all', '100</br>Totally smart'];
+  var labelsTolerant       = ['0</br>Not tolerant at all', '100</br>Totally tolerant'];
+  var labelsUnderstanding  = ['0</br>Not understanding at all', '100</br>Totally understanding'];
+  var labelsVicious        = ['0</br>Not vicious at all', '100</br>Totally vicious'];
+  var labelsWeak           = ['0</br>Not weak at all', '100</br>Totally weak'];
+
 
   var Aggressive          = genJudgmentTask('aggressive',       labelsAggressive);
-  var Friendly            = genJudgmentTask('friendly',         labelsFriendly);
-  var Cruel               = genJudgmentTask('cruel',            labelsCruel);
-  var Powerless           = genJudgmentTask('powerless',        labelsPowerless);
-  var Smart               = genJudgmentTask('smart',            labelsSmart);
-  var Bored               = genJudgmentTask('bored',            labelsBored);
+  var Antisocial          = genJudgmentTask('antisocial',       labelsAntisocial);
+  var Bored               = genJudgmentTask('bored',       labelsBored);
+  var Brutal              = genJudgmentTask('brutal',       labelsBrutal);  
+  var Clever              = genJudgmentTask('clever',       labelsClever);
+  var Cooperative         = genJudgmentTask('cooperative',       labelsCooperative);
+  var Cordial             = genJudgmentTask('cordial',       labelsCordial);
+  var Cowardly            = genJudgmentTask('cowardly',       labelsCowardly);
+  var Cruel               = genJudgmentTask('cruel',       labelsCruel);
+  var Friendly            = genJudgmentTask('friendly',       labelsFriendly);
+  var Independent         = genJudgmentTask('independent',       labelsIndependent);
+  var Lonely              = genJudgmentTask('lonely',       labelsLonely);
+  var Persistent          = genJudgmentTask('persistent',       labelsPersistent);
+  var Powerless           = genJudgmentTask('powerless',       labelsPowerless);
+  var Skillful            = genJudgmentTask('skillful',       labelsSkillful);
+  var Smart               = genJudgmentTask('smart',       labelsSmart);
+  var Tolerant            = genJudgmentTask('tolerant',       labelsTolerant);
+  var Understanding       = genJudgmentTask('understanding',       labelsUnderstanding);
+  var Vicious             = genJudgmentTask('vicious',       labelsVicious);
+  var Weak                = genJudgmentTask('weak',       labelsWeak);
 
   // Randomize judgments trait order
-  var traitsOrder = _.sampleSize(['Aggressive', 'Friendly', 'Cruel', 'Powerless', 'Smart', 'Bored'], 6);
+  var traitsOrder = _.sampleSize(['Aggressive', 'Antisocial', 'Bored', 'Brutal', 'Clever', 'Cooperative', 'Cordial', 'Cowardly', 'Cruel', 'Friendly', 'Independent', 'Lonely', 'Persistent', 'Powerless', 'Skillful', 'Smart', 'Tolerant', 'Understanding', 'Vicious', 'Weak'], 20);
   console.log(traitsOrder);
 
   /* AGE */
